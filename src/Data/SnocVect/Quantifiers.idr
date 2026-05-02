@@ -1,14 +1,18 @@
 module Data.SnocVect.Quantifiers
 
 import Data.SnocVect
+import Data.DPair
 
 %default total
 %prefix_record_projections off
 
 namespace All
-  ||| A proof that all elements of a snoc-vector satisfy a property. It is a list of
-  ||| proofs, corresponding element-wise to the `SnocVect`.
   public export
   data All : (0 p : a -> Type) -> SnocVect n a -> Type where
     Lin  : All p Lin
-    (:<) : {0 xs : SnocVect n a} -> All p sx -> p x -> All p (sx :< x)
+    (:<) : {0 sx : SnocVect n a} -> All p sx -> p x -> All p (sx :< x)
+
+  public export
+  pushIn : (sx : SnocVect n a) -> (0 _ : All p sx) -> SnocVect n $ Subset a p
+  pushIn [<]       [<]       = [<]
+  pushIn (sx :< x) (sp :< p) = pushIn sx sp :< Element x p

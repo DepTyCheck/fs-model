@@ -6,20 +6,20 @@ import Filesystems.Node
 %prefix_record_projections off
 
 public export
-0 FsNodeOp : Type
-FsNodeOp = {0 mty : RootLabel -> Type} -> {0 fty : Type} -> FsNode mty fty IsRoot -> FsNode mty fty IsRoot -> Type
-
-namespace FsNodeOps
-  public export
-  data FsNodeOps : FsNodeOp -> FsNode mty fty IsRoot -> Type where
-    Nil : {0 no : FsNodeOp} ->
-          FsNodeOps no st
-    (::) : {0 no : FsNodeOp} ->
-           (op : no f t) ->
-           (cont : FsNodeOps no t) ->
-           FsNodeOps no f
+0 FsOpsType : (RootLabel -> Type) -> Type -> Type
+FsOpsType mty fty = FsNode mty fty IsRoot -> FsNode mty fty IsRoot -> Type
 
 export infixl 8 |+|
 public export
-(|+|) : FsNodeOp -> FsNodeOp -> FsNodeOp
+(|+|) : FsOpsType mty fty -> FsOpsType mty fty -> FsOpsType mty fty
 (|+|) l r pred f = Either (l pred f) (r pred f)
+
+namespace FsOpsSeq
+  public export
+  data FsOpsSeq : FsOpsType mty fty -> FsNode mty fty IsRoot -> Type where
+    Nil : {0 no : FsOpsType mty fty} ->
+          FsOpsSeq no st
+    (::) : {0 no : FsOpsType mty fty} ->
+           (op : no f t) ->
+           (cont : FsOpsSeq no t) ->
+           FsOpsSeq no f

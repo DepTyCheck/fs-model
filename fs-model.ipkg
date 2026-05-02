@@ -14,15 +14,20 @@ authors = "Elk Cloner"
 
 -- packages to add to search path
 depends = containers
+        , i-hate-parens
 
 -- modules to install
--- modules =
+modules = Filesystems.Node
+        , Filesystems.Node.Index
+        , Filesystems.NodeOps
+        , Filesystems.Impl.Posix
+        , Filesystems.Impl.FAT32
 
 -- main file (i.e. file to load at REPL)
-main = Main
+-- main = Main
 
 -- name of executable
-executable = "fs-model"
+-- executable = "fs-model"
 -- opts =
 sourcedir = "src"
 -- builddir =
