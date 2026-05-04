@@ -77,15 +77,19 @@ data Filename : Type where
     MkFilename : Vect FilenameLength Bits8 -> Filename
 %runElab derive "Filename" [Show, Eq]
 
+public export
 0 FsNode' : RootLabel -> Type
 FsNode' = FsNode MetadataSelector Filename
 
+public export
 0 FsEntries' : SnocVect k Presence -> Type
 FsEntries' prs = FsEntries prs MetadataSelector Filename
 
+public export
 0 UniqNames' : SnocVect k Presence -> Type
 UniqNames' prs = UniqNames prs Filename
 
+public export
 totsum : SnocVect k NodeArgs -> Nat
 totsum ars = sum $ (.tot) <$> ars
 
