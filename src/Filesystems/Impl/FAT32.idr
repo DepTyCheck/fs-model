@@ -117,7 +117,7 @@ data Node : NodeCfg -> NodeArgs -> FsNode' rootl -> Type where
            {0 prs : SnocVect k Presence} ->
            (names : UniqNames' prs) ->
            {0 ents : FsEntries' prs} ->
-           (entries : FAT32Entries cfg ars prs ents) ->
+           (entries : FAT32Entries (MkNodeCfg clustSize) ars prs ents) ->
            Node (MkNodeCfg clustSize) (
                MkNodeArgs (divCeilNZ' (DirentSize * (2 + k)) clustSize) (divCeilNZ' (DirentSize * (2 + k)) clustSize + totsum ars) @{lteAddRight (divCeilNZ' (DirentSize * (2 + k)) clustSize) {m = totsum ars}}
            ) (Dir meta names ents)
@@ -129,7 +129,7 @@ data Node : NodeCfg -> NodeArgs -> FsNode' rootl -> Type where
            (names : UniqNames' prs) ->
            {0 ars : SnocVect k NodeArgs} ->
            {0 ents : FsEntries' prs} ->
-           (entries : FAT32Entries cfg ars prs ents) ->
+           (entries : FAT32Entries (MkNodeCfg clustSize) ars prs ents) ->
            Node (MkNodeCfg clustSize) (
                let cur' = divCeilNZ' (DirentSize * k) clustSize
                in MkNodeArgs cur' (cur' + totsum ars) @{lteAddRight cur' {m = totsum ars}}
