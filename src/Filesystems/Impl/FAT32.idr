@@ -149,3 +149,7 @@ data FAT32OnlyOps : FsOpsType MetadataSelector Filename where
 public export
 0 FAT32Ops : FsOpsType MetadataSelector Filename
 FAT32Ops = PosixOps |+| FAT32OnlyOps
+
+public export
+0 FAT32OpsSeq : FsNode' IsRoot -> Type
+FAT32OpsSeq = FsOpsSeq FAT32Ops
