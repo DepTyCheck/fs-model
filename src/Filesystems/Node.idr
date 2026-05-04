@@ -45,6 +45,21 @@ namespace UniqNames
                   {0 sub : NameIsNew ff (Just f)} ->
                   NameIsNew {prs=prs :< Present} ((:<) ff (Just f) @{sub}) (Just newf)
 
+    public export
+    length : UniqNames prs fty -> Nat
+    length [<] = 0
+    length (ff :< f) = S $ length ff
+
+    export
+    lengthUnfold : (ff : UniqNames prs fty) -> length ff === length prs
+    lengthUnfold [<] = Refl
+    lengthUnfold (ff :< f) = cong S $ lengthUnfold ff
+
+    export
+    lengthCorrect : (ff : UniqNames {k} prs fty) -> length ff === k
+    lengthCorrect [<] = Refl
+    lengthCorrect (ff :< f) = cong S $ lengthCorrect ff
+
 public export
 data FsNode : (mty : RootLabel -> Type) -> (fty : Type) -> RootLabel -> Type
 
