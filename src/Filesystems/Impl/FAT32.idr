@@ -113,6 +113,7 @@ data Node : NodeCfg -> NodeArgs -> FsNode' rootl -> Type where
     Dir  : forall clustSize.
            (0 clustNZ : IsSucc clustSize) =>           
            (meta : Metadata) ->
+           {ars : SnocVect k NodeArgs} ->
            {0 prs : SnocVect k Presence} ->
            (names : UniqNames' prs) ->
            {0 ents : FsEntries' prs} ->
@@ -123,6 +124,7 @@ data Node : NodeCfg -> NodeArgs -> FsNode' rootl -> Type where
     Root : forall clustSize.
            (0 clustNZ : IsSucc clustSize) =>
            {0 k : Nat} ->
+           {ars : SnocVect k NodeArgs} ->
            {0 prs : SnocVect k Presence} ->
            (names : UniqNames' prs) ->
            {0 ars : SnocVect k NodeArgs} ->
