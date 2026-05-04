@@ -3,3 +3,9 @@ type = "local"
 path = "."
 ipkg = "fs-model.ipkg"
 test = "test/test.ipkg"
+
+[custom.all.contrib-nat-division]
+type = "github"
+url = "https://github.com/elkcl/idris2-contrib-nat-division"
+commit = "latest:main"
+ipkg = "contrib-nat-division.ipkg"

@@ -5,6 +5,7 @@ import Filesystems.Node.Index
 import Filesystems.NodeOps
 import Filesystems.Impl.Posix
 import Data.Nat
+import Data.Nat.Division
 import Data.DPair
 import Data.Vect
 import Data.SnocVect
@@ -100,18 +101,11 @@ public export
 0 FAT32Entries : NodeCfg -> SnocVect k NodeArgs -> (prs : SnocVect k Presence) -> FsEntries' prs -> Type
 FAT32Entries cfg ars prs ents = All (\(ar, Element pr ent) => MaybeNode cfg ar ent) (zip ars $ pushIn prs ents) 
 
-%hide Data.Nat.divCeilNZ
-public export
-divCeilNZ : Nat -> (y: Nat) -> (0 _ : IsSucc y) => Nat
-divCeilNZ x y = case (modNatNZ x y %search) of
-    Z   => divNatNZ x y %search
-    S _ => S (divNatNZ x y %search)
-
 data Node : NodeCfg -> NodeArgs -> FsNode' rootl -> Type where
     File : (0 clustNZ : IsSucc clustSize) =>
            (meta : Metadata) ->
            (blob : SnocVect k Bits8) ->
-           Node (MkNodeCfg clustSize) (MkNodeArgs (divCeilNZ k clustSize) (divCeilNZ k clustSize) @{Relation.reflexive}) (File meta blob)
+           Node (MkNodeCfg clustSize) (MkNodeArgs (divCeilNZ' k clustSize) (divCeilNZ' k clustSize) @{Relation.reflexive}) (File meta blob)
     Dir  : forall clustSize.
            (0 clustNZ : IsSucc clustSize) =>           
            (meta : Metadata) ->
@@ -120,7 +114,7 @@ data Node : NodeCfg -> NodeArgs -> FsNode' rootl -> Type where
            {0 ents : FsEntries' prs} ->
            (entries : FAT32Entries cfg ars prs ents) ->
            Node (MkNodeCfg clustSize) (
-               MkNodeArgs (divCeilNZ (DirentSize * (2 + k)) clustSize) (divCeilNZ (DirentSize * (2 + k)) clustSize + totsum ars) @{lteAddRight (divCeilNZ (DirentSize * (2 + k)) clustSize) {m = totsum ars}}
+               MkNodeArgs (divCeilNZ' (DirentSize * (2 + k)) clustSize) (divCeilNZ' (DirentSize * (2 + k)) clustSize + totsum ars) @{lteAddRight (divCeilNZ' (DirentSize * (2 + k)) clustSize) {m = totsum ars}}
            ) (Dir meta names ents)
     Root : forall clustSize.
            (0 clustNZ : IsSucc clustSize) =>
@@ -131,7 +125,7 @@ data Node : NodeCfg -> NodeArgs -> FsNode' rootl -> Type where
            {0 ents : FsEntries' prs} ->
            (entries : FAT32Entries cfg ars prs ents) ->
            Node (MkNodeCfg clustSize) (
-               let cur' = divCeilNZ (DirentSize * k) clustSize
+               let cur' = divCeilNZ' (DirentSize * k) clustSize
                in MkNodeArgs cur' (cur' + totsum ars) @{lteAddRight cur' {m = totsum ars}}
            ) (Root () names ents)
 
