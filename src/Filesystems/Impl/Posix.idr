@@ -97,12 +97,6 @@ overwriteAt def sx off ys with (truncate def sx off [])
     drop' (n' :: x') (S k') = drop' x' k'
 
 public export
-enrichLen : SnocVect n ty -> (m ** SnocVect m ty)
-enrichLen [<] = (0 ** [<])
-enrichLen (sx :< x) with (enrichLen sx)
-  _ | (m ** sx') = (_ ** sx' :< x)
-
-public export
 writeNode : FileWritable (mty NotRoot) =>
             (root : FsNode mty fty IsRoot) ->
             (idx : IndexIn root NotRoot FileI) ->
@@ -111,8 +105,7 @@ writeNode : FileWritable (mty NotRoot) =>
             (blob : Vect len Bits8) ->
             FsNode mty fty IsRoot
 writeNode root idx off len blob with (indexGet root idx)
-  _ | (Element (File meta sx) _) with (enrichLen sx)
-    _ | (_ ** sx') = if not $ isWritable meta then root else indexSet _ idx $ File meta $ overwriteAt 0 sx' off blob
+  _ | (Element (File meta sx) _) = if not $ isWritable meta then root else indexSet _ idx $ File meta $ overwriteAt 0 {n = length sx} (rewrite lengthCorrect sx in sx) off blob
   _ | (Element (Dir {}) ati) = void $ uninhabited ati
 
 public export
