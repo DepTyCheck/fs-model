@@ -2,10 +2,25 @@
 type = "local"
 path = "."
 ipkg = "fs-model.ipkg"
-test = "test/test.ipkg"
+
+[custom.all.fat32-equiv]
+type = "local"
+path = "examples/fat32-equiv"
+ipkg = "fat32-equiv.ipkg"
 
 [custom.all.contrib-nat-division]
 type = "github"
 url = "https://github.com/elkcl/idris2-contrib-nat-division"
 commit = "latest:main"
 ipkg = "contrib-nat-division.ipkg"
+
+# [custom.all.fat32-model]
+# type = "github"
+# url = "https://github.com/DepTyCheck/fat32-model"
+# commit = "9118d71cb5907afce339b3ccd0b7bf60ed9d8bfa"
+# ipkg = "fat32-model.ipkg"
+
+[custom.all.fat32-model]
+type = "local"
+path = "../fat32-model"
+ipkg = "fat32-model.ipkg"

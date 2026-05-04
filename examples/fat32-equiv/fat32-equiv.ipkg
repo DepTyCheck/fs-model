@@ -1,6 +1,6 @@
-package fs-model
+package fat32-equiv
 version = 0.1.0
-authors = "elkcl"
+authors = "Elk Cloner"
 -- maintainers =
 -- license =
 -- brief =
@@ -13,23 +13,17 @@ authors = "elkcl"
 -- langversion
 
 -- packages to add to search path
-depends = containers
-        , i-hate-parens
-        , contrib-nat-division
+depends = fs-model
+        , fat32-model
 
 -- modules to install
-modules = Filesystems.Node
-        , Filesystems.Node.Index
-        , Filesystems.NodeOps
-        , Filesystems.Impl.Posix
-        , Filesystems.Impl.FAT32
-        , Data.SnocVect.Quantifiers
+-- modules =
 
 -- main file (i.e. file to load at REPL)
--- main = Main
+main = Main
 
 -- name of executable
--- executable = "fs-model"
+executable = "fat32-equiv"
 -- opts =
 sourcedir = "src"
 -- builddir =
