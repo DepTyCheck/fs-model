@@ -112,11 +112,17 @@ totsumEq (sx :< (MkNodeArgs cur tot)) = do
     u `trans` plusCommutative _ _
 
 public export
-g2cEntries : FAT32Entries cfg {k} ars prs ents -> HSnocVectMaybeNode (cast cfg) k (cast ars) (cast prs)
+g2cMaybeNode : G.MaybeNode cfg ar {pr} ent -> C.MaybeNode.MaybeNode (cast cfg) (cast ar) (cast pr)
+
+public export
+g2cEntries : {ars : SnocVect k G.NodeArgs} -> FAT32Entries cfg ars prs ents -> HSnocVectMaybeNode (cast cfg) k (cast ars) (cast prs)
 g2cEntries x with 0 (zip ars $ pushIn prs ents)
-  g2cEntries [<] | [<] with 0 (ars)
-    g2cEntries [<] | [<] | aaaa = ?aaa_rhsa_rhsa
-  g2cEntries (psx :< px) | (zsx :< zx) = ?bbb
+  g2cEntries [<] | [<] = tmp ars prs where
+    tmp : (0 ars : SnocVect 0 G.NodeArgs) -> (0 prs : SnocVect 0 F.Presence) -> {0 cfg : G.NodeCfg} -> HSnocVectMaybeNode (cast cfg) 0 (cast ars) (cast prs)
+    tmp [<] [<] = [<]
+  g2cEntries (psx :< px) | (zsx :< (arr, Element prr entt)) = tmp ars prs ents where
+    tmp : (ars : SnocVect (S n) G.NodeArgs) -> (0 prs : SnocVect (S n) F.Presence) -> (0 ents : FsEntries' prs) -> HSnocVectMaybeNode (cast cfg) (S n) (cast ars) (cast prs)
+    tmp (arss :< arr) (prss :< prr) (entss :< entt) = ?tmp_rhs_1 :< g2cMaybeNode px
 
 public export
 g2cImage : {0 fs : FsNode' rootl} -> G.Node cfg ar fs -> C.Node.Node (cast cfg) (cast ar) (cast rootl)
